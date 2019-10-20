@@ -1,0 +1,46 @@
+<%- include('../includes/head.ejs') %>
+    <body>
+
+        <%- include('../includes/header-nav.ejs') %>
+
+        <main class="container">
+            <% if(products.length > 0) { %>
+            <div class="grid-4">
+                <% for(let product of products) { %>
+                <div
+                    class="card elevation col justify-space-between align-center"
+                >
+                    <h2
+                        class="text-center"
+                        style="height: 45px; overflow: hidden;"
+                    >
+                        <%= product.title || 'New Book' %>
+                    </h2>
+                    <% if(product.image) { %>
+                        <img
+                            src="<%= product.image %>"
+                            alt="<% product.title %>"
+                            style="height: 150px; width: 100px;"
+                        />
+                    <% } else { %>
+                        <img
+                            src="https://quittingbydesign.com/wp-content/uploads/2018/09/image-coming-soon-placeholder.jpg"
+                            alt="<% product.title %>"
+                            style="height: 150px; width: 100px;"
+                        />
+                    <% } %>
+                    <h3 class="text-center"><%= product.price || 'Free' %></h3>
+                    <p><%= product.description || 'No description' %></p>
+
+                    <%- include('../includes/addToCartButton.ejs', { product }) %>
+
+                </div>
+                <% } %>
+            </div>
+            <% } else { %>
+                <h2>No products available</h2>
+            <% } %>
+        </main>
+    </body>
+
+<%- include('../includes/footer.ejs') %>

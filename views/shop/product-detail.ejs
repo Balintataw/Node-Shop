@@ -1,0 +1,45 @@
+<%- include('../includes/head.ejs') %>
+    <body>
+
+        <%- include('../includes/header-nav.ejs') %>
+
+        <main class="container">
+                <h1
+                    class="text-center mb-1"
+                    style="height: 45px;"
+                >
+                    <%= product.title || 'New Book' %>
+                </h1>
+                <hr />
+            <div class="row justify-center">
+                <div class="col justify-center p-3">
+                    <% if(product.price > 0) { %>
+                        <h3 class="text-center">$<%= (product.price * 0.01).toFixed(2) %></h3>
+                    <% } else { %>
+                        <h3 class="text-center">Free</h3>
+                    <% } %>
+                    <p><%= product.description || 'No description' %></p>
+                </div>
+                <div class="col justify-center align-center p-3">
+                    <% if(product.image) { %>
+                        <img
+                            src="<%= product.image %>"
+                            alt="<% product.title %>"
+                            style="height: 150px; width: 100px;"
+                        />
+                    <% } else { %>
+                        <img
+                            src="https://quittingbydesign.com/wp-content/uploads/2018/09/image-coming-soon-placeholder.jpg"
+                            alt="<% product.title %>"
+                            style="height: 150px; width: 100px;"
+                        />
+                    <% } %>
+                </div>
+            </div>
+
+            <%- include('../includes/addToCartButton.ejs') %>
+
+        </main>
+    </body>
+
+<%- include('../includes/footer.ejs') %>
