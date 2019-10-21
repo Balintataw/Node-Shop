@@ -1,3 +1,5 @@
+<% include('../includes/functions.ejs') %>
+
 <%- include('../includes/head.ejs') %>
     <body>
 
@@ -29,7 +31,7 @@
                             style="height: 150px; width: 100px;"
                         />
                     <% } %>
-                    <h3 class="text-center"><%= product.price || 'Free' %></h3>
+                    <h3 class="text-center"><%= formatCentsToDollars(product.price) || 'Free' %></h3>
                     <p><%= product.description || 'No description' %></p>
 
                     <%- include('../includes/addToCartButton.ejs', { product }) %>

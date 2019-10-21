@@ -1,8 +1,21 @@
 <%- include('../includes/head.ejs') %>
+
     <body>
 
-        <%- include('../includes/header-nav.ejs') %>
+    <%- include('../includes/header-nav.ejs') %>
 
+        <main>
+            <form class="container" action="/admin/edit_product" method="POST">
+                <input type="text" name="title" placeholder="Title" value="<%= product.title %>" />
+                <input type="number" name="price" placeholder="Price" step="0.01" value="<%= product.price %>"/>
+                <textarea type="text" name="description" placeholder="Description" rows="4" value="<%= product.description %>"></textarea>
+                <input type="file" name="image" value="<%= product.image %>" />
+                <input type="hidden" name="uid" value="<%= product.uid %>">
+                <button class="btn btn-primary" type="submit">
+                    Save
+                </button>
+            </form>
+        </main>
     </body>
 
 <%- include('../includes/footer.ejs') %>

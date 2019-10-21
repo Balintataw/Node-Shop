@@ -1,4 +1,5 @@
 const Product = require('../models/product');
+const Cart = require('../models/cart');
 
 exports.getAddProductPage = (req, res, next) => {
   res.render('admin/add-product', {title: 'Add Product', path: '/admin/add-product'});
@@ -57,11 +58,12 @@ exports.getCheckoutPage = (req, res, next) => {
 
 exports.postToCart = async (req, res, next) => {
     const productId = req.body.uid;
-  try {
-    const product = await Product.getProductById(productId); 
-    res.redirect('/cart');
-    // res.render('shop/product-detail', { title: product.title, path: '', product: product });
-  } catch (error) {
-    console.error("Error fetching product", error);
-  }
+    try {
+      const product = await Product.getProductById(productId); 
+      Cart.addProduct(product);
+      res.redirect('/cart');
+      // res.render('shop/product-detail', { title: product.title, path: '', product: product });
+    } catch (error) {
+      console.error("Error fetching product", error);
+    }
 };
