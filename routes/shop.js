@@ -6,10 +6,11 @@ const router = express.Router();
 router.get('/', shopController.getIndexPage);
 
 router.get('/products', shopController.getProductsListPage);
-router.get('/products/:uid', shopController.getProductDetailPage);
+router.get('/products/:id', shopController.getProductDetailPage);
 
 router.get('/cart', shopController.getCartPage);
 router.post('/cart', shopController.postToCart);
+router.post('/cart_delete_item', shopController.postToCartRemoveItem);
 
 router.get('/orders', shopController.getOrdersPage);
 

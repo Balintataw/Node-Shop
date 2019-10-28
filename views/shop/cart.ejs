@@ -1,8 +1,47 @@
-<%- include('../includes/head.ejs') %>
-    <body>
-
-        <%- include('../includes/header-nav.ejs') %>
-
-    </body>
+<%- include('../includes/functions.ejs') %> <%- include('../includes/head.ejs')
+%>
+<body>
+    <%- include('../includes/header-nav.ejs') %>
+    <main class="container">
+        <% if(products && products.length > 0) { %>
+        <div class="grid-4">
+            <% for(let item of products) { %>
+            <div class="card elevation col justify-space-between align-center">
+                <h2 class="text-center" style="height: 45px; overflow: hidden;">
+                    <%= item.productData.title || 'New Book' %>
+                </h2>
+                <img
+                    src="<%= item.productData.imageUri %>"
+                    alt="<% item.productData.title %>"
+                    style="height: 150px; width: 100px;"
+                />
+                <% if(item.productData.price > 0) { %>
+                <h3 class="text-center">
+                    <%= formatCentsToDollars(item.productData.price) %>
+                </h3>
+                <% } else { %>
+                <h3 class="text-center">Free</h3>
+                <% } %>
+                <p><%= item.productData.description || 'No description' %></p>
+                <div class="row">
+                    <form action="/cart_delete_item" method="POST">
+                        <button class="btn btn-primary" type="submit">
+                            Remove
+                        </button>
+                        <input
+                            type="hidden"
+                            name="id"
+                            value="<%= item.productData.id %>"
+                        />
+                    </form>
+                </div>
+            </div>
+            <% } %>
+        </div>
+        <% } else { %>
+        <h1>Your cart is empty</h1>
+        <% } %>
+    </main>
+</body>
 
 <%- include('../includes/footer.ejs') %>

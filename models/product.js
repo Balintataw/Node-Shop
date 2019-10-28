@@ -1,73 +1,77 @@
 const fs = require('fs');
+const db = require('../utils/conn');
 const path = require('path');
 const rootDir = require('../utils/path');
-const createProductUID = require('../utils/uid');
 
 const Cart = require('./cart');
 const productsFilePath = path.join(rootDir, 'data', 'products.json');
 
-const getProductsFromFile = (id) => {
-    return new Promise((resolve, reject) => {
-      fs.readFile(productsFilePath, (err, data) => {
-      if(err) {
-        resolve([]);
-      }
-      let allProducts = JSON.parse(data);
-        if(id) {
-          resolve(allProducts.find(p => p.uid === id))
-        } else {
-          resolve(allProducts);
-        }
-    });
-  });
-};
-
 module.exports = class Product {
-  constructor(config={}) {
-    this.uid = null;
+  constructor(config = {}) {
+    this.id = null;
     this.title = 'New Book';
-    this.image = 'https://quittingbydesign.com/wp-content/uploads/2018/09/image-coming-soon-placeholder.jpg';
+    this.imageUri = 'https://quittingbydesign.com/wp-content/uploads/2018/09/image-coming-soon-placeholder.jpg';
     this.description = 'New Book';
     this.price = 0;
     config && Object.assign(this, config);
   };
 
   save = async () => {
-    let products = await getProductsFromFile();
-    if (this.uid) {
-      const existingProductIndex = products.findIndex(p => p.id = this.uid);
-      const updatedProducts = [...products]
-      updatedProducts[existingProductIndex] = this;
-      fs.writeFile(productsFilePath, JSON.stringify(updatedProducts), (err) => {
-        if (err) {
-          console.log("ERROR WRITING EDIT:", err);
-        }
+    if (this.id) {
+      return db.execute(`
+        UPDATE products
+        SET title = ?, imageUri = ?, description = ?, price = ?)
+        WHERE id = ?;`,
+        [this.title, this.imageUri, this.description, this.price, this.id]
+      ).then(([rows, data]) => {
+        return rows;
+      }).catch(error => {
+        console.log("QUERY ERROR", error)
       });
     } else {
-      this.uid = createProductUID();
-      products.push(this);
-      fs.writeFile(productsFilePath, JSON.stringify(products), (err) => {
-        if (err) {
-          console.log("ERROR WRITING SAVE:", err);
-        }
+      return db.execute(`
+        INSERT INTO products
+        (title, imageUri, description, price)
+        VALUES (?, ?, ?, ?);`,
+        [this.title, this.imageUri, this.description, this.price]
+      ).then(([rows, data]) => {
+        return rows;
+      }).catch(error => {
+        console.log("QUERY ERROR", error)
       });
     }
   };
 
   static getProducts = () => {
-    return getProductsFromFile();
+    return db.execute(
+      `SELECT * FROM products;`
+    ).then(([rows, data]) => {
+      return rows;
+    }).catch(error => {
+      console.log("QUERY ERROR", error)
+    });
   };
 
   static getProductById = (id) => {
     if (!id) throw new Error('No id provided')
-    return getProductsFromFile(id);
+    return db.execute(
+      `SELECT * 
+      FROM products 
+      WHERE id = ?;`,
+      [id]
+    ).then(([rows, data]) => {
+      console.log("BY ID", rows[0]);
+      return rows[0];
+    }).catch(error => {
+      console.log("QUERY ERROR", error)
+    });
   }
 
   static deleteById = async (id) => {
     try {
-      let products = await getProductsFromFile();
-      const productForRemoval = products.find(p => p.uid === id);
-      const updatedProducts = products.filter(p => p.uid !== id);
+      let products = await getProducts();
+      const productForRemoval = products.find(p => p.id === id);
+      const updatedProducts = products.filter(p => p.id !== id);
       fs.writeFile(productsFilePath, JSON.stringify(updatedProducts), (err) => {
         if (err) {
           console.log("ERROR WRITING Deleted:", err);

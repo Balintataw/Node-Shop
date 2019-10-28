@@ -1,10 +1,12 @@
 const http = require('http');
 const path = require('path');
 const express = require('express');
+require('dotenv').config();
 const bodyParser = require('body-parser');
 const adminRouter = require('./routes/admin');
 const shopRouter = require('./routes/shop');
 const errorController = require('./controllers/error');
+const db = require('./utils/conn');
 
 const PORT = 3001;
 
