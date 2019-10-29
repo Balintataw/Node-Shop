@@ -15,7 +15,6 @@ exports.postAddProduct = (req, res, next) => {
 exports.getProductsListPage = async (req, res, next) => {
   try {
     const products = await Product.getProducts();
-    console.log("PRODUCTS", products);
     res.render('shop/product-list', { products, path: '/products', title: 'All Products' });
   } catch (error) {
     console.error("Error fetching products", error);
@@ -51,7 +50,6 @@ exports.getCartPage = async (req, res, next) => {
         return { productData: prod, qty: item.qty }
       }
     });
-    console.log('Products in cart', productsInCart)
     res.render('shop/cart', { path: '/cart', title: 'Your Cart', products: productsInCart });
   } catch (error) {
     console.error("Error fetching products in cart", error);

@@ -4,13 +4,13 @@ exports.getAddProductPage = (req, res, next) => {
   res.render('admin/add-product', { title: 'Add Product', path: '/admin/add-product' });
 };
 
-exports.postAddProduct = (req, res, next) => {
+exports.postAddProduct = async (req, res, next) => {
   const title = req.body.title;
   const price = req.body.price;
   const imageUri = req.body.imageUri;
   const description = req.body.description;
   const newProduct = new Product({ title, price, imageUri, description });
-  newProduct.save();
+  await newProduct.save()
   res.redirect('/');
 };
 

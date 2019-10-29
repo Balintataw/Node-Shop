@@ -9,9 +9,9 @@ const productsFilePath = path.join(rootDir, 'data', 'products.json');
 module.exports = class Product {
   constructor(config = {}) {
     this.id = null;
-    this.title = 'New Book';
+    this.title = 'New Item';
     this.imageUri = 'https://quittingbydesign.com/wp-content/uploads/2018/09/image-coming-soon-placeholder.jpg';
-    this.description = 'New Book';
+    this.description = 'New Item';
     this.price = 0;
     config && Object.assign(this, config);
   };
@@ -26,7 +26,7 @@ module.exports = class Product {
       ).then(([rows, data]) => {
         return rows;
       }).catch(error => {
-        console.log("QUERY ERROR", error)
+        console.log("UPDATE ERROR", error)
       });
     } else {
       return db.execute(`
@@ -37,7 +37,7 @@ module.exports = class Product {
       ).then(([rows, data]) => {
         return rows;
       }).catch(error => {
-        console.log("QUERY ERROR", error)
+        console.log("INSERT ERROR", error)
       });
     }
   };
