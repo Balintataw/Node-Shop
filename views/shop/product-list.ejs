@@ -24,11 +24,16 @@
                 <h3 class="text-center">Free</h3>
                 <% } %>
                 <p><%= product.description || 'No description' %></p>
-                <a class="btn btn-primary" href="/products/<%= product.id %>"
-                    >Details</a
-                >
+                <div class="row">
+                    <a
+                        class="btn btn-linear btn-sm"
+                        href="/products/<%= product.id %>"
+                        >Details</a
+                    >
 
-                <%- include('../includes/addToCartButton.ejs', { product }) %>
+                    <%- include('../includes/addToCartButton.ejs', { product,
+                    small: true }) %>
+                </div>
             </div>
             <% } %>
         </div>

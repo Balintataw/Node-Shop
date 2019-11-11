@@ -3,8 +3,8 @@ const sequelize = require('../utils/database');
 
 const { INTEGER } = Sequelize;
 
-class Cart extends Sequelize.Model { }
-Cart.init(
+class Order extends Sequelize.Model { }
+Order.init(
   {
     id: {
       type: INTEGER,
@@ -12,8 +12,11 @@ Cart.init(
       allowNull: false,
       primaryKey: true,
     },
+    quantity: {
+      type: INTEGER
+    }
   },
-  { sequelize, modelName: 'cart' }
+  { sequelize, modelName: 'order' }
 );
 
-module.exports = Cart;
+module.exports = Order;

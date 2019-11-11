@@ -1,4 +1,9 @@
 <form action="/cart" method="POST" class="text-center">
-    <button class="btn btn-primary" type="submit">Add To Cart</button>
+    <button
+        class="btn btn-linear <%= small ? 'btn-sm' : ''%> ? 'btn-sm' : undefined"
+        type="submit"
+    >
+        Add To Cart
+    </button>
     <input type="hidden" name="id" value="<%= product.id %>" />
 </form>
