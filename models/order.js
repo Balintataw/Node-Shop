@@ -12,9 +12,6 @@ Order.init(
       allowNull: false,
       primaryKey: true,
     },
-    quantity: {
-      type: INTEGER
-    }
   },
   { sequelize, modelName: 'order' }
 );

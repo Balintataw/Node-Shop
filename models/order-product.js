@@ -12,6 +12,7 @@ OrderProduct.init(
       allowNull: false,
       primaryKey: true,
     },
+    quantity: INTEGER,
   },
   { sequelize, modelName: 'orderProduct' }
 );

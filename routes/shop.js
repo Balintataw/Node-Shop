@@ -13,6 +13,7 @@ router.post('/cart', shopController.postToCart);
 router.post('/cart_delete_item', shopController.postToCartRemoveItem);
 
 router.get('/orders', shopController.getOrdersPage);
+router.post('/create_order', shopController.postOrder);
 
 router.get('/checkout', shopController.getCheckoutPage);
 

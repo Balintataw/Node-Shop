@@ -9,6 +9,8 @@
     --light-color: #f4f4f4;
     --danger-color: #dc3545;
     --success-color: #28a745;
+    --accent-color: #f8d01c;
+    --accent-color-darken: #c4a20f;
 }
 
 * {
@@ -78,6 +80,10 @@ img {
 
 .text-dark {
     color: var(--dark-color);
+}
+
+.text-accent {
+    color: var(--accent-color);
 }
 
 .text-success {
@@ -380,6 +386,14 @@ img {
     color: #fff;
 }
 
+.btn-linear-accent {
+    background-image: linear-gradient(
+        var(--accent-color),
+        var(--accent-color-darken)
+    );
+    color: var(--dark-color);
+}
+
 .btn-link {
     background: none;
     padding: 0;
@@ -432,6 +446,14 @@ img {
 .badge-light,
 .alert-light {
     background: var(--light-color);
+    color: var(--dark-color);
+}
+
+.btn-accent,
+.bg-accent,
+.badge-accent,
+.alert-accent {
+    background: var(--accent-color);
     color: var(--dark-color);
 }
 

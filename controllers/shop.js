@@ -1,5 +1,4 @@
 const Product = require('../models/product');
-const Cart = require('../models/cart');
 
 exports.getAddProductPage = (req, res, next) => {
   res.render('admin/add-product', { title: 'Add Product', path: '/admin/add-product' });
@@ -45,8 +44,14 @@ exports.getCartPage = async (req, res, next) => {
   }
 };
 
-exports.getOrdersPage = (req, res, next) => {
-  res.render('shop/orders', { path: '/orders', title: 'Orders' });
+exports.getOrdersPage = async (req, res, next) => {
+  try {
+    const orders = await req.user.getOrders({ include: ['products'] }); // eager loading the product model
+    res.render('shop/orders', { path: '/orders', title: 'Orders', orders });
+  } catch (error) {
+    console.error("Error fetching orders", error);
+
+  }
 };
 
 exports.getCheckoutPage = (req, res, next) => {
@@ -96,5 +101,21 @@ exports.postToCartRemoveItem = async (req, res, next) => {
     res.redirect('/cart');
   } catch (error) {
     console.error("Error fetching product", error);
+  }
+};
+
+exports.postOrder = async (req, res, next) => {
+  try {
+    const cart = await req.user.getCart();
+    const products = await cart.getProducts();
+    const order = await req.user.createOrder();
+    await order.addProducts(products.map(p => {
+      p.orderProduct = { quantity: p.cartProduct.quantity }
+      return p;
+    }));
+    await cart.setProducts(null);
+    res.redirect('/orders');
+  } catch (error) {
+    console.error("Error creating order", error);
   }
 };

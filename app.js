@@ -67,6 +67,9 @@ Product.belongsToMany(Cart, {
 Order.belongsToMany(Product, {
   through: OrderProduct
 });
+Product.belongsToMany(Order, {
+  through: OrderProduct
+});
 
 sequelize.sync()
   // sequelize.sync({ force: true })

@@ -35,7 +35,11 @@
                 </div>
             </div>
             <% } %>
-        </!-->
+            <form action="/create_order" method="POST">
+                <button class="btn btn-linear-accent" type="submit">
+                    Checkout
+                </button>
+            </form>
         <% } else { %>
         <h1>Your cart is empty</h1>
         <% } %>
