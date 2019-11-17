@@ -7,14 +7,16 @@
         <div>
             <% for(let item of products) { %>
             <div class="card elevation row justify-space-between align-center">
-                <h2 class="text-center" style="overflow: hidden;">
-                    <%= item.title || 'New Book' %>
-                </h2>
-                <img
-                    src="<%= item.imageUri %>"
-                    alt="<% item.title %>"
-                    style="height: 100px; width: 100px;"
-                />
+                <div class="row align-center">
+                    <img
+                        src="<%= item.imageUri %>"
+                        alt="<% item.title %>"
+                        style="height: 100px; width: 100px;"
+                    />
+                    <h2 class="text-center ml-2" style="overflow: hidden;">
+                        <%= item.title || 'New Book' %>
+                    </h2>
+                </div>
                 <div class="row align-center">
                     <% if(item.price > 0) { %>
                         <h3 class="text-center mr-2">
@@ -24,13 +26,13 @@
                         <h3 class="text-center mr-2">Free</h3>
                     <% } %>
                     <h3 class="text-center mr-2">
-                        <%= item.cartProduct.quantity %>
+                        <%= item.quantity %>
                     </h3>
                     <form action="/cart_delete_item" method="POST">
                         <button class="btn btn-linear btn-sm ml-2" type="submit">
                             Remove
                         </button>
-                        <input type="hidden" name="id" value="<%= item.id %>" />
+                        <input type="hidden" name="id" value="<%= item._id %>" />
                     </form>
                 </div>
             </div>

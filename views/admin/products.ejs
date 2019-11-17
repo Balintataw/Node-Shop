@@ -1,55 +1,51 @@
 <%- include('../includes/functions.ejs') %> <%- include('../includes/head.ejs')
 %>
 <body>
-    <%- include('../includes/header-nav.ejs') %>
+  <%- include('../includes/header-nav.ejs') %>
 
-    <main class="container">
-        <% if(products.length > 0) { %>
-        <div class="grid-4">
-            <% for(let product of products) { %>
-            <div class="card elevation col justify-space-between align-center">
-                <h2 class="text-center" style="height: 45px; overflow: hidden;">
-                    <%= product.title || 'New Book' %>
-                </h2>
-                <img
-                    src="<%= product.imageUri %>"
-                    alt="<% product.title %>"
-                    style="height: 150px; width: 100px;"
-                />
-                <% if(product.price > 0) { %>
-                <h3 class="text-center">
-                    <%= formatCentsToDollars(product.price) %>
-                </h3>
-                <% } else { %>
-                <h3 class="text-center">Free</h3>
-                <% } %>
-                <p><%= product.description || 'No description' %></p>
-                <div class="row">
-                    <form action="/admin/delete_product" method="POST">
-                        <a
-                            href="/admin/edit_product/<%= product.id %>"
-                            class="btn btn-linear btn-sm"
-                            style="color: #FFFFFF"
-                        >
-                            Edit
-                        </a>
-                        <button class="btn btn-linear btn-sm" type="submit">
-                            Delete
-                        </button>
-                        <input
-                            type="hidden"
-                            name="id"
-                            value="<%= product.id %>"
-                        />
-                    </form>
-                </div>
-            </div>
-            <% } %>
-        </div>
+  <main class="container">
+    <% if(products.length > 0) { %>
+    <div class="grid-4">
+      <% for(let product of products) { %>
+      <div class="card elevation col justify-space-between align-center">
+        <h2 class="text-center" style="height: 45px; overflow: hidden;">
+          <%= product.title || 'New Book' %>
+        </h2>
+        <img
+          src="<%= product.imageUri %>"
+          alt="<% product.title %>"
+          style="height: 150px; width: 100px;"
+        />
+        <% if(product.price > 0) { %>
+        <h3 class="text-center">
+          <%= formatCentsToDollars(product.price) %>
+        </h3>
         <% } else { %>
-        <h2>No products available</h2>
+        <h3 class="text-center">Free</h3>
         <% } %>
-    </main>
+        <p><%= product.description || 'No description' %></p>
+        <div class="row">
+          <form action="/admin/delete_product" method="POST">
+            <a
+              href="/admin/edit_product/<%= product._id %>"
+              class="btn btn-linear btn-sm"
+              style="color: #FFFFFF"
+            >
+              Edit
+            </a>
+            <button class="btn btn-linear btn-sm" type="submit">
+              Delete
+            </button>
+            <input type="hidden" name="id" value="<%= product._id %>" />
+          </form>
+        </div>
+      </div>
+      <% } %>
+    </div>
+    <% } else { %>
+    <h2>No products available</h2>
+    <% } %>
+  </main>
 </body>
 
 <%- include('../includes/footer.ejs') %>

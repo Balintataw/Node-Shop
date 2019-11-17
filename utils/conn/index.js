@@ -1,23 +1,28 @@
-// const mysql = require("mysql2");
-const Sequelize = require('sequelize');
+const mongodb = require('mongodb');
+const MongoClient = mongodb.MongoClient;
 
-const sequelize = new Sequelize(
-  process.env.DB_NAME,
-  process.env.DB_USER,
-  process.env.DB_PASSWORD,
-  {
-    dialect: 'mysql',
-    host: 'localhost'
+let _db;
+
+const mongoConnect = async cb => {
+  try {
+    const conn = await MongoClient.connect(
+      `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0-node-shop-dev-5mjt8.mongodb.net/shop?retryWrites=true&w=majority`,
+      { useUnifiedTopology: true },
+    );
+    // _db = conn.db('test');
+    _db = conn.db();
+    cb();
+  } catch (error) {
+    console.log('DB CONNECTION ERROR:', error);
+    throw new Error(error);
   }
-);
+};
 
-module.exports = sequelize;
+const getDb = () => {
+  if (_db) {
+    return _db;
+  }
+};
 
-// const pool = mysql.createPool({
-//   host: 'localhost',
-//   user: process.env.DB_USER,
-//   database: process.env.DB_NAME,
-//   password: process.env.DB_PASSWORD
-// });
-
-// module.exports = pool.promise();
+exports.mongoConnect = mongoConnect;
+exports.getDb = getDb;
