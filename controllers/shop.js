@@ -1,4 +1,5 @@
 const Product = require('../models/product');
+const Order = require('../models/order');
 
 exports.getAddProductPage = (req, res, next) => {
   res.render('admin/add-product', {
@@ -65,15 +66,6 @@ exports.getCartPage = async (req, res, next) => {
   }
 };
 
-exports.getOrdersPage = async (req, res, next) => {
-  try {
-    const orders = await req.user.getOrders();
-    res.render('shop/orders', { path: '/orders', title: 'Orders', orders });
-  } catch (error) {
-    console.error('Error fetching orders', error);
-  }
-};
-
 exports.getCheckoutPage = (req, res, next) => {
   res.render('shop/checkout', { path: '/checkout', title: 'Checkout' });
 };
@@ -101,9 +93,34 @@ exports.postToCartRemoveItem = async (req, res, next) => {
   }
 };
 
+exports.getOrdersPage = async (req, res, next) => {
+  try {
+    const orders = await Order.find({ 'user.userId': req.user._id });
+    res.render('shop/orders', { path: '/orders', title: 'Orders', orders });
+  } catch (error) {
+    console.error('Error fetching orders', error);
+  }
+};
+
 exports.postOrder = async (req, res, next) => {
   try {
-    await req.user.addOrder();
+    const userWithCartItems = await req.user
+      .populate('cart.items.productId')
+      .execPopulate();
+    const order = new Order({
+      user: {
+        username: req.user.username,
+        userId: req.user,
+      },
+      products: userWithCartItems.cart.items.map(p => {
+        return {
+          quantity: p.quantity,
+          product: { ...p.productId._doc },
+        };
+      }),
+    });
+    await order.save();
+    await req.user.clearCart();
     res.redirect('/orders');
   } catch (error) {
     console.error('Error creating order', error);

@@ -12,10 +12,10 @@
         <div class="card">
           <h2>Order # <%= order._id %></h2>
           <ul>
-            <% order.items.forEach(product => { %>
+            <% order.products.forEach(product => { %>
             <li>
-              <%= product.title %> (<%= product.quantity %>) <%=
-              formatCentsToDollars(product.price) %>
+              <%= product.product.title %> (<%= product.quantity %>) <%=
+              formatCentsToDollars(product.product.price) %>
             </li>
 
             <% }) %>
