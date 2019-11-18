@@ -23,10 +23,7 @@
         name="description"
         placeholder="No Description"
         rows="4"
-      >
-                <%= product.description %>
-            </textarea
-      >
+      ><%= product.description %></textarea>
       <input type="file" name="imageUri" value="<%= product.imageUri %>" />
       <input type="hidden" name="id" value="<%= product._id %>" />
       <button class="btn btn-linear" type="submit">

@@ -24,6 +24,7 @@
         <h3 class="text-center">Free</h3>
         <% } %>
         <p><%= product.description || 'No description' %></p>
+        <!-- <p>By: <%= product.userId.username || 'No author' %></p> -->
         <div class="row">
           <form action="/admin/delete_product" method="POST">
             <a

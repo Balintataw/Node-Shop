@@ -9,18 +9,18 @@
             <div class="card elevation row justify-space-between align-center">
                 <div class="row align-center">
                     <img
-                        src="<%= item.imageUri %>"
-                        alt="<% item.title %>"
+                        src="<%= item.productId.imageUri %>"
+                        alt="<% item.productId.title %>"
                         style="height: 100px; width: 100px;"
                     />
                     <h2 class="text-center ml-2" style="overflow: hidden;">
-                        <%= item.title || 'New Book' %>
+                        <%= item.productId.title || 'Unnamed' %>
                     </h2>
                 </div>
                 <div class="row align-center">
-                    <% if(item.price > 0) { %>
+                    <% if(item.productId.price > 0) { %>
                         <h3 class="text-center mr-2">
-                            <%= formatCentsToDollars(item.price) %>
+                            <%= formatCentsToDollars(item.productId.price) %>
                         </h3>
                     <% } else { %>
                         <h3 class="text-center mr-2">Free</h3>
@@ -32,7 +32,7 @@
                         <button class="btn btn-linear btn-sm ml-2" type="submit">
                             Remove
                         </button>
-                        <input type="hidden" name="id" value="<%= item._id %>" />
+                        <input type="hidden" name="id" value="<%= item.productId._id %>" />
                     </form>
                 </div>
             </div>

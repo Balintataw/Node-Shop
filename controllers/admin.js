@@ -8,20 +8,20 @@ exports.getAddProductPage = (req, res, next) => {
 };
 
 exports.postAddProduct = async (req, res, next) => {
-  const user = req.user;
   const title = req.body.title;
   const price = req.body.price;
-  const imageUri = req.body.imageUri;
+  const imageUri =
+    req.body.imageUri ||
+    'https://playactionbraid.com/cms/wp-content/uploads/2017/05/Product-Image-Coming-Soon.png';
   const description = req.body.description;
   try {
-    const product = new Product(
+    const product = new Product({
       title,
       price,
-      imageUri,
       description,
-      null,
-      user._id,
-    );
+      imageUri,
+      userId: req.user,
+    });
     await product.save();
     res.redirect('/admin/products');
   } catch (error) {
@@ -32,7 +32,7 @@ exports.postAddProduct = async (req, res, next) => {
 
 exports.getShopPage = async (req, res, next) => {
   try {
-    const products = await Product.fetchAll();
+    const products = await Product.find();
     res.render('shop/product-list', { products, path: '/shop', title: 'Shop' });
   } catch (error) {
     console.error('Error fetching products', error);
@@ -41,7 +41,7 @@ exports.getShopPage = async (req, res, next) => {
 
 exports.getProductsPage = async (req, res, next) => {
   try {
-    const products = await Product.fetchAll();
+    const products = await Product.find().populate('userId', '_id username');
     res.render('admin/products', {
       products,
       path: '/admin/products',
@@ -74,7 +74,11 @@ exports.postEditProduct = async (req, res, next) => {
   const imageUri = req.body.imageUri;
   const description = req.body.description;
   try {
-    const product = new Product(title, price, imageUri, description, id);
+    let product = await Product.findById(id);
+    product.title = title;
+    product.price = price;
+    product.imageUri = imageUri || product.imageUri;
+    product.description = description;
     await product.save();
     res.redirect('/admin/products');
   } catch (error) {
@@ -86,7 +90,7 @@ exports.postEditProduct = async (req, res, next) => {
 exports.postDeleteProduct = async (req, res, next) => {
   const id = req.body.id;
   try {
-    await Product.deleteById(id);
+    await Product.findByIdAndRemove(id);
     res.redirect('/admin/products');
   } catch (error) {
     res.redirect('/');

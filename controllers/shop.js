@@ -15,49 +15,50 @@ exports.postAddProduct = (req, res, next) => {
 };
 
 exports.getProductsListPage = async (req, res, next) => {
-  Product.fetchAll()
-    .then(products => {
-      res.render('shop/product-list', {
-        products,
-        path: '/products',
-        title: 'All Products',
-      });
-    })
-    .catch(error => {
-      console.error('Error fetching products', error);
+  try {
+    const products = await Product.find();
+    res.render('shop/product-list', {
+      products,
+      path: '/products',
+      title: 'All Products',
     });
+  } catch (error) {
+    console.error('Error fetching products', error);
+  }
 };
 
 exports.getProductDetailPage = async (req, res, next) => {
   const id = req.params.id;
-  Product.findById(id)
-    .then(product => {
-      res.render('shop/product-detail', {
-        title: product.title,
-        path: '',
-        product: product,
-      });
-    })
-    .catch(err => console.log('ERROR GETTING PRODUCT', err));
+  try {
+    const product = await Product.findById(id);
+    res.render('shop/product-detail', {
+      title: product.title,
+      path: '',
+      product: product,
+    });
+  } catch (error) {
+    console.error('Error fetching product', err);
+  }
 };
 
 exports.getIndexPage = async (req, res, next) => {
-  Product.fetchAll()
-    .then(products => {
-      res.render('shop/index', { products, path: '/shop', title: 'Shop' });
-    })
-    .catch(error => {
-      console.error('Error fetching products', error);
-    });
+  try {
+    const products = await Product.find();
+    res.render('shop/index', { products, path: '/shop', title: 'Shop' });
+  } catch (error) {
+    console.error('Error fetching products', error);
+  }
 };
 
 exports.getCartPage = async (req, res, next) => {
   try {
-    const products = await req.user.getCart();
+    const userWithCartItems = await req.user
+      .populate('cart.items.productId')
+      .execPopulate();
     res.render('shop/cart', {
       path: '/cart',
       title: 'Your Cart',
-      products: products,
+      products: userWithCartItems.cart.items,
     });
   } catch (error) {
     console.error('Error fetching products in cart', error);
